@@ -1,4 +1,5 @@
-﻿using BookService.Domain.Interfaces;
+﻿using BookService.Application.Common;
+using BookService.Domain.Interfaces;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -22,22 +23,26 @@ namespace BookService.Application.Commands
         private readonly IBookRepository _bookRepository;
         private readonly IAuthorRepository _authorRepository;
         private readonly IGenreRepository _genreRepository;
-
+        private readonly ValidatorService _validatorService;
         public UpdateBookCommandHandler(
             IBookRepository bookRepository,
             IAuthorRepository authorRepository,
-            IGenreRepository genreRepository)
+            IGenreRepository genreRepository,
+            ValidatorService validatorService)
         {
             _bookRepository = bookRepository;
             _authorRepository = authorRepository;
             _genreRepository = genreRepository;
+            _validatorService = validatorService;
         }
 
         public async Task Handle(UpdateBookCommand request, CancellationToken cancellationToken)
         {
+            await _validatorService.ValidateAsync<UpdateBookCommand>(request, cancellationToken);
+
             var book = await _bookRepository.GetByIdAsync(request.Id);
             if (book == null)
-                throw new Exception("Book not found");
+                throw new Exception("Книга с таким Id не найдена");
 
             var authors = await _authorRepository.GetByIdsAsync(request.AuthorIds);
             var genres = await _genreRepository.GetByIdsAsync(request.GenreIds);

@@ -5,8 +5,8 @@ using BookService.Domain.Entities;
 
 namespace BookService.Application.Queries
 {
-    public record GetAllBooksQuery : IRequest<List<Book>>;
-    public class GetAllBooksQueryHandler : IRequestHandler<GetAllBooksQuery, List<Book>>
+    public record GetAllBooksQuery : IRequest<IEnumerable<Book>>;
+    public class GetAllBooksQueryHandler : IRequestHandler<GetAllBooksQuery, IEnumerable<Book>>
     {
         private readonly IBookRepository _bookRepository;
 
@@ -15,9 +15,10 @@ namespace BookService.Application.Queries
             _bookRepository = bookRepository;
         }
 
-        public async Task<List<Book>> Handle(GetAllBooksQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Book>> Handle(GetAllBooksQuery request, CancellationToken cancellationToken)
         {
-            return (List<Book>)await _bookRepository.GetAllAsync();
+            var books = await _bookRepository.GetAllAsync();
+            return books;
         }
     }
 }

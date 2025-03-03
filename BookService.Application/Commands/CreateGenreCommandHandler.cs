@@ -1,4 +1,5 @@
-﻿using BookService.Domain.Entities;
+﻿using BookService.Application.Common;
+using BookService.Domain.Entities;
 using BookService.Domain.Interfaces;
 using MediatR;
 using System;
@@ -13,14 +14,18 @@ namespace BookService.Application.Commands
     public class CreateGenreCommandHandler : IRequestHandler<CreateGenreCommand, Genre>
     {
         private readonly IGenreRepository _genreRepository;
+        private readonly ValidatorService _validatorService;
 
-        public CreateGenreCommandHandler(IGenreRepository genreRepository)
+        public CreateGenreCommandHandler(IGenreRepository genreRepository, ValidatorService validatorService)
         {
             _genreRepository = genreRepository;
+            _validatorService = validatorService;
         }
 
         public async Task<Genre> Handle(CreateGenreCommand request, CancellationToken cancellationToken)
         {
+            await _validatorService.ValidateAsync<CreateGenreCommand>(request, cancellationToken);
+
             var genre = new Genre
             {
                 Name = request.Name

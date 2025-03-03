@@ -1,6 +1,7 @@
-﻿using BookService.Application.Commands;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using BookService.Application.Commands;
+using BookService.Domain.Entities;
 
 namespace BookService.API.Controllers
 {
@@ -16,7 +17,7 @@ namespace BookService.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> CreateGenre(CreateGenreCommand command)
+        public async Task<ActionResult<Genre>> CreateGenre(CreateGenreCommand command)
         {
             var result = await _mediator.Send(command);
             return Ok(result);

@@ -52,23 +52,31 @@ namespace BookService.Infrastructure.Persistence.Repositories
             }
         }
 
-        public async Task<IEnumerable<Book>> GetByFilterAsync(string? genre, string? author, string? title)
+        public async Task<IEnumerable<Book>> SearchBooksAsync(string? title, List<string>? genres, List<string>? authors, int? startYear, int? endYear)
         {
-            var query = _context.Books
+            var books = _context.Books
                 .Include(b => b.Authors)
                 .Include(b => b.Genres)
                 .AsQueryable();
 
             if (!string.IsNullOrEmpty(title))
-                query = query.Where(b => b.Title.Contains(title));
+                books = books.Where(b => b.Title.Contains(title));
 
-            if (!string.IsNullOrEmpty(author))
-                query = query.Where(b => b.Authors.Any(a => a.FullName.Contains(author)));
+            if (authors != null && authors.Count != 0)
+                books = books.Where(b => b.Authors.Any(a => authors.Contains(a.FullName)));
 
-            if (!string.IsNullOrEmpty(genre))
-                query = query.Where(b => b.Genres.Any(g => g.Name.Contains(genre)));
+            if (genres != null && genres.Count != 0)
+                books = books.Where(b => b.Genres.Any(g => genres.Contains(g.Name)));
 
-            return await query.ToListAsync();
+            if (startYear.HasValue)
+                books = books.Where(b => b.PublicationYear >= startYear.Value);
+
+            if (endYear.HasValue)
+                books = books.Where(b => b.PublicationYear <= endYear.Value);
+
+            return await books.ToListAsync();
         }
+
+
     }
 }

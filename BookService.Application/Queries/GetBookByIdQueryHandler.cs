@@ -6,9 +6,9 @@ using BookService.Application.DTO;
 
 namespace BookService.Application.Queries
 {
-    public record GetBookByIdQuery(int Id) : IRequest<BookDto>;
+    public record GetBookByIdQuery(int Id) : IRequest<Book>;
 
-    public class GetBookByIdQueryHandler : IRequestHandler<GetBookByIdQuery, BookDto>
+    public class GetBookByIdQueryHandler : IRequestHandler<GetBookByIdQuery, Book>
     {
         private readonly IBookRepository _bookRepository;
 
@@ -17,20 +17,20 @@ namespace BookService.Application.Queries
             _bookRepository = bookRepository;
         }
 
-        public async Task<BookDto> Handle(GetBookByIdQuery request, CancellationToken cancellationToken)
+        public async Task<Book> Handle(GetBookByIdQuery request, CancellationToken cancellationToken)
         {
-            var book = await _bookRepository.GetByIdAsync(request.Id);
-
-            return new BookDto
+            if (request.Id <= 0)
             {
-                Id = book.Id,
-                Title = book.Title,
-                PublicationYear = book.PublicationYear,
-                Description = book.Description,
-                Genres = book.Genres.Select(g => new GenreDto { Id = g.Id, Name = g.Name }).ToList(),
-                Authors = book.Authors.Select(a => new AuthorDto { Id = a.Id, FullName = a.FullName }).ToList(),
-                Condition = book.Condition
-            };
+                throw new ArgumentException("Неверный ID книги.");
+            }
+
+            var book = await _bookRepository.GetByIdAsync(request.Id);
+            if (book == null)
+            {
+                throw new Exception("Книга с данным ID не найдена.");
+            }
+            
+            return book;         
         }
     }
 }

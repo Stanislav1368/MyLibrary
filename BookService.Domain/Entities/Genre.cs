@@ -12,7 +12,11 @@ namespace BookService.Domain.Entities
     public class Genre
     {
         public int Id { get; set; }
+
+        [Required(ErrorMessage = "Название жанра обязательно.")]
+        [StringLength(50, ErrorMessage = "Название жанра не должно превышать 50 символов.")]
         public string Name { get; set; }
+
         [JsonIgnore]
         public List<Book> Books { get; set; } = new List<Book>();
     }

@@ -1,11 +1,11 @@
 ﻿using MediatR;
 using BookService.Domain.Interfaces;
 using BookService.Domain.Entities;
-using BookService.Application.DTO;
+using FluentValidation;
+using BookService.Application.Common;
 
 namespace BookService.Application.Commands
 {
-    // Команда теперь возвращает BookDto вместо Book
     public record CreateBookCommand(
         string Title,
         List<int> AuthorIds,
@@ -13,26 +13,30 @@ namespace BookService.Application.Commands
         int? PublicationYear,
         string Description,
         bool IsAccess,
-        string Condition) : IRequest<BookDto>;
+        string Condition) : IRequest<Book>;
 
-    public class CreateBookCommandHandler : IRequestHandler<CreateBookCommand, BookDto>
+    public class CreateBookCommandHandler : IRequestHandler<CreateBookCommand, Book>
     {
         private readonly IBookRepository _bookRepository;
         private readonly IAuthorRepository _authorRepository;
         private readonly IGenreRepository _genreRepository;
-
+        private readonly ValidatorService _validatorService;
         public CreateBookCommandHandler(
-            IBookRepository bookRepository,
-            IAuthorRepository authorRepository,
-            IGenreRepository genreRepository)
+             IBookRepository bookRepository,
+             IAuthorRepository authorRepository,
+             IGenreRepository genreRepository,
+             ValidatorService validatorService)
         {
             _bookRepository = bookRepository;
             _authorRepository = authorRepository;
             _genreRepository = genreRepository;
+            _validatorService = validatorService;
         }
 
-        public async Task<BookDto> Handle(CreateBookCommand request, CancellationToken cancellationToken)
+        public async Task<Book> Handle(CreateBookCommand request, CancellationToken cancellationToken)
         {
+            await _validatorService.ValidateAsync<CreateBookCommand>(request, cancellationToken);
+
             var authors = await _authorRepository.GetByIdsAsync(request.AuthorIds);
             var genres = await _genreRepository.GetByIdsAsync(request.GenreIds);
 
@@ -48,26 +52,26 @@ namespace BookService.Application.Commands
             };
 
             await _bookRepository.AddAsync(book);
-
-            return new BookDto
-            {
-                Id = book.Id,
-                Title = book.Title,
-                PublicationYear = book.PublicationYear,
-                Description = book.Description,
-                IsAccess = book.IsAccess,
-                Condition = book.Condition,
-                Authors = book.Authors.Select(a => new AuthorDto
-                {
-                    Id = a.Id,
-                    FullName = a.FullName
-                }).ToList(),
-                Genres = book.Genres.Select(g => new GenreDto
-                {
-                    Id = g.Id,
-                    Name = g.Name
-                }).ToList()
-            };
+            return book;
+            //return new BookDto
+            //{
+            //    Id = book.Id,
+            //    Title = book.Title,
+            //    PublicationYear = book.PublicationYear,
+            //    Description = book.Description,
+            //    IsAccess = book.IsAccess,
+            //    Condition = book.Condition,
+            //    Authors = book.Authors.Select(a => new AuthorDto
+            //    {
+            //        Id = a.Id,
+            //        FullName = a.FullName
+            //    }).ToList(),
+            //    Genres = book.Genres.Select(g => new GenreDto
+            //    {
+            //        Id = g.Id,
+            //        Name = g.Name
+            //    }).ToList()
+            //};
         }
     }
 }

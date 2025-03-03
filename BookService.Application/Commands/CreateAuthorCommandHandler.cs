@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FluentValidation;
+using BookService.Application.Common;
 
 namespace BookService.Application.Commands
 {
@@ -17,14 +19,17 @@ namespace BookService.Application.Commands
     public class CreateAuthorCommandHandler : IRequestHandler<CreateAuthorCommand, Author>
     {
         private readonly IAuthorRepository _authorRepository;
-
-        public CreateAuthorCommandHandler(IAuthorRepository authorRepository)
+        private readonly ValidatorService _validatorService;
+        public CreateAuthorCommandHandler(IAuthorRepository authorRepository, ValidatorService validatorService)
         {
             _authorRepository = authorRepository;
+            _validatorService = validatorService;
         }
 
         public async Task<Author> Handle(CreateAuthorCommand request, CancellationToken cancellationToken)
         {
+            await _validatorService.ValidateAsync<CreateAuthorCommand>(request, cancellationToken);
+
             var author = new Author
             {
                 FullName = request.FullName,
