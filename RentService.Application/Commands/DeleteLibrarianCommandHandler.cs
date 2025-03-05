@@ -1,7 +1,8 @@
 ﻿using MediatR;
-using BookService.Domain.Interfaces;
+using RentService.Domain.Interfaces;
 
-namespace BookService.Application.Commands
+
+namespace RentService.Application.Commands
 {
     public record DeleteLibrarianCommand(int Id) : IRequest;
     public class DeleteLibrarianCommandHandler : IRequestHandler<DeleteLibrarianCommand>

@@ -1,8 +1,8 @@
 ﻿using MediatR;
-using BookService.Domain.Entities;
-using BookService.Domain.Interfaces;
+using RentService.Domain.Entities;
+using RentService.Domain.Interfaces;
 
-namespace BookService.Application.Commands
+namespace RentService.Application.Commands
 {
     public record CreateRenterCommand(string FullName, string Address, string Phone, string Email) : IRequest<Renter>;
     public class CreateRenterCommandHandler : IRequestHandler<CreateRenterCommand, Renter>

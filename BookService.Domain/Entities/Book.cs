@@ -24,8 +24,6 @@ namespace BookService.Domain.Entities
         [StringLength(1000, ErrorMessage = "Описание не должно превышать 1000 символов.")]
         public string Description { get; set; }
 
-        public bool IsAccess { get; set; }
-
         [Required(ErrorMessage = "Состояние книги обязательно.")]
         [StringLength(100, ErrorMessage = "Состояние книги не должно превышать 100 символов.")]
         public string? Condition { get; set; }

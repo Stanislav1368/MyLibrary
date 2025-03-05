@@ -1,9 +1,9 @@
-using BookService.Domain.Interfaces;
-using BookService.Infrastructure.Persistence.Repositories;
-using BookService.Infrastructure.Persistence;
+using RentService.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using BookService.Application.Commands;
+using RentService.Application.Commands;
 using System.Text.Json.Serialization;
+using RentService.Infrastructure.Persistence.Repositories;
+using RentService.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<RentMicroserviceContext>(options =>

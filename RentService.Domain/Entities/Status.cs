@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BookService.Domain.Entities
+namespace RentService.Domain.Entities
 {
     public class Status
     {

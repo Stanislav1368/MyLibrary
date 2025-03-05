@@ -1,18 +1,17 @@
-﻿using BookService.Domain.Entities;
-using BookService.Domain.Interfaces;
+﻿using RentService.Domain.Entities;
+using RentService.Domain.Interfaces;
 using System.Text.Json;
 using MediatR;
 using System.Text.Json.Serialization;
 
-namespace BookService.Application.Commands
+namespace RentService.Application.Commands
 {
     public record CreateRentalCommand(
            int ExternalBookId,
            int RenterId,
            int LibrarianId,
            DateTime StartDate,
-           DateTime EndDate,
-           string Review) : IRequest<Rental>;
+           DateTime EndDate) : IRequest<Rental>;
 
     public class CreateRentalCommandHandler : IRequestHandler<CreateRentalCommand, Rental>
     {
@@ -22,7 +21,7 @@ namespace BookService.Application.Commands
         private readonly IStatusRepository _statusRepository;
         private readonly HttpClient _httpClient;
 
-        public CreateRentalCommandHandler(IRentalRepository rentalRepository, IStatusRepository statusRepository , ILibrarianRepository librarianRepository, IRenterRepository renterRepository, HttpClient httpClient)
+        public CreateRentalCommandHandler(IRentalRepository rentalRepository, IStatusRepository statusRepository, ILibrarianRepository librarianRepository, IRenterRepository renterRepository, HttpClient httpClient)
         {
             _rentalRepository = rentalRepository;
             _renterRepository = renterRepository;
@@ -47,14 +46,14 @@ namespace BookService.Application.Commands
                 throw new Exception("Арендатор с таким Id не найден");
             }
 
-          
+
             var librarian = await _librarianRepository.GetByIdAsync(request.LibrarianId);
             if (librarian == null)
             {
                 throw new Exception("Библиотекарь с таким Id не найден");
             }
 
-  
+
             var status = await _statusRepository.GetByIdAsync(1);
             if (status == null)
             {
@@ -72,7 +71,6 @@ namespace BookService.Application.Commands
                 Status = status,
                 StartDate = request.StartDate,
                 EndDate = request.EndDate,
-                Review = request.Review
             };
 
             await _rentalRepository.AddAsync(rental);
@@ -90,7 +88,7 @@ namespace BookService.Application.Commands
             return book?.Id ?? throw new Exception("Книга с таким Id не найдена");
         }
 
-        private record BookResponse([property: JsonPropertyName("id")] int Id) ;
+        private record BookResponse([property: JsonPropertyName("id")] int Id);
     }
 
 }

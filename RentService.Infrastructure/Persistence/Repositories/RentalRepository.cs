@@ -1,8 +1,8 @@
 ﻿    using Microsoft.EntityFrameworkCore;
-    using BookService.Domain.Entities;
-    using BookService.Domain.Interfaces;
+    using RentService.Domain.Entities;
+    using RentService.Domain.Interfaces;
 
-    namespace BookService.Infrastructure.Persistence.Repositories
+    namespace RentService.Infrastructure.Persistence.Repositories
     {
         public class RentalRepository : IRentalRepository
         {
@@ -54,8 +54,7 @@
             }
             public async Task<bool> IsBookRentedAsync(int bookId)
             {
-                return await _context.Rentals.AnyAsync(r => r.BookId == bookId && r.Status.Name != "Возврат" && r.ActualReturnDate == null);
-
+                return _context.Rentals.Any(r => r.BookId == bookId && r.Status.Id != 2 && r.ActualReturnDate == null);
             }   
         }
 

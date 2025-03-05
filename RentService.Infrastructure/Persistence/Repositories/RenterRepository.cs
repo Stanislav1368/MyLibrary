@@ -1,14 +1,8 @@
-﻿using BookService.Infrastructure.Persistence;
-using Microsoft.EntityFrameworkCore;
-using BookService.Domain.Entities;
-using BookService.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
+using RentService.Domain.Entities;
+using RentService.Domain.Interfaces;
 
-namespace BookService.Infrastructure.Persistence.Repositories
+namespace RentService.Infrastructure.Persistence.Repositories
 {
     public class RenterRepository : IRenterRepository
     {

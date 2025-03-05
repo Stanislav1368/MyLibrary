@@ -12,7 +12,6 @@ namespace BookService.Application.Commands
         List<int> GenreIds,
         int? PublicationYear,
         string Description,
-        bool IsAccess,
         string Condition) : IRequest<Book>;
 
     public class CreateBookCommandHandler : IRequestHandler<CreateBookCommand, Book>
@@ -47,7 +46,6 @@ namespace BookService.Application.Commands
                 Genres = genres.ToList(),
                 PublicationYear = request.PublicationYear,
                 Description = request.Description,
-                IsAccess = request.IsAccess,
                 Condition = request.Condition
             };
 

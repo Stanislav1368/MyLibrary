@@ -9,7 +9,16 @@ using System.Threading.Tasks;
 
 namespace BookService.Application.Queries
 {
-    public record SearchBooksQuery(string? Title, List<string>? Genres, List<string>? Authors, int? StartYear, int? EndYear) : IRequest<IEnumerable<Book>>;
+    public record SearchBooksQuery(
+     string? Title,
+     List<string>? Genres,
+     List<string>? Authors,
+     int? StartYear,
+     int? EndYear,
+     int Page,
+     int PageSize,
+     string SortBy,
+     string SortOrder) : IRequest<IEnumerable<Book>>;
 
     public class SearchBooksQueryHandler : IRequestHandler<SearchBooksQuery, IEnumerable<Book>>
     {
@@ -22,7 +31,7 @@ namespace BookService.Application.Queries
 
         public async Task<IEnumerable<Book>> Handle(SearchBooksQuery request, CancellationToken cancellationToken)
         {
-            return await _bookRepository.SearchBooksAsync(request.Title, request.Genres, request.Authors, request.StartYear, request.EndYear);
+            return await _bookRepository.SearchBooksAsync(request.Title, request.Genres, request.Authors, request.StartYear, request.EndYear, request.Page, request.PageSize, request.SortBy, request.SortOrder);
         }
     }
 }

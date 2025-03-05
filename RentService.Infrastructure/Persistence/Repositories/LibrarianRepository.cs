@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using BookService.Domain.Entities;
-using BookService.Domain.Interfaces;
+using RentService.Domain.Entities;
+using RentService.Domain.Interfaces;
 
-namespace BookService.Infrastructure.Persistence.Repositories
+namespace RentService.Infrastructure.Persistence.Repositories
 {
     public class LibrarianRepository : ILibrarianRepository
     {

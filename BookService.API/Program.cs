@@ -24,7 +24,7 @@ builder.Services.AddScoped<ValidatorService>();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 builder.Services.AddScoped<IGenreRepository, GenreRepository>();
 builder.Services.AddScoped<IBookRepository, BookRepository>();
-
+builder.Services.AddHttpClient();
 
 
 builder.Services.AddControllers()

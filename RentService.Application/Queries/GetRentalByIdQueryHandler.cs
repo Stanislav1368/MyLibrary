@@ -1,13 +1,13 @@
 ﻿using MediatR;
-using BookService.Domain.Entities;
-using BookService.Domain.Interfaces;
+using RentService.Domain.Entities;
+using RentService.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookService.Application.Queries
+namespace RentService.Application.Queries
 {
     public record GetRentalByIdQuery(int Id) : IRequest<Rental>;
     public class GetRentalByIdQueryHandler : IRequestHandler<GetRentalByIdQuery, Rental>

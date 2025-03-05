@@ -16,7 +16,6 @@ namespace BookService.Application.Commands
     List<int> GenreIds,
     int? PublicationYear,
     string Description,
-    bool IsAccess,
     string Condition) : IRequest;
     public class UpdateBookCommandHandler : IRequestHandler<UpdateBookCommand>
     {
@@ -52,7 +51,6 @@ namespace BookService.Application.Commands
             book.Genres = genres.ToList();
             book.PublicationYear = request.PublicationYear;
             book.Description = request.Description;
-            book.IsAccess = request.IsAccess;
             book.Condition = request.Condition;
 
             await _bookRepository.UpdateAsync(book);

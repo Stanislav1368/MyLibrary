@@ -1,12 +1,12 @@
 ﻿using MediatR;
-using BookService.Domain.Interfaces;
+using RentService.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookService.Application.Commands
+namespace RentService.Application.Commands
 {
     public record UpdateRentalCommand(int Id, int StatusId, string Review) : IRequest;
     public class UpdateRentalCommandHandler : IRequestHandler<UpdateRentalCommand>

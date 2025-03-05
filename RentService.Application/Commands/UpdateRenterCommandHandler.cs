@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using BookService.Domain.Interfaces;
+using RentService.Domain.Interfaces;
 
-namespace BookService.Application.Commands
+namespace RentService.Application.Commands
 {
     public record UpdateRenterCommand(int Id, string FullName, string Email, string Phone) : IRequest;
     public class UpdateRenterCommandHandler : IRequestHandler<UpdateRenterCommand>

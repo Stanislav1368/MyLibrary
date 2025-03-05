@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using BookService.Domain.Interfaces;
 using BookService.Domain.Entities;
-using BookService.Application.DTO;
+
 
 
 namespace BookService.Application.Queries

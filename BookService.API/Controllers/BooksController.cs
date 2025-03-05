@@ -41,7 +41,7 @@ namespace BookService.API.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateBook(int id, UpdateBookCommand command)
         {
-            await _mediator.Send(new UpdateBookCommand(id, command.Title, command.AuthorIds, command.GenreIds, command.PublicationYear, command.Description, command.IsAccess, command.Condition));
+            await _mediator.Send(new UpdateBookCommand(id, command.Title, command.AuthorIds, command.GenreIds, command.PublicationYear, command.Description, command.Condition));
             return NoContent();
         }
 
@@ -51,11 +51,32 @@ namespace BookService.API.Controllers
             await _mediator.Send(new DeleteBookCommand(id));
             return NoContent();
         }
+
         [HttpGet("search")]
-        public async Task<ActionResult<List<Book>>> SearchBooks(SearchBooksQuery command)
+        public async Task<ActionResult<List<Book>>> SearchBooks(
+             [FromQuery] string? title,
+             [FromQuery] List<string>? genres,
+             [FromQuery] List<string>? authors,
+             [FromQuery] int? startYear,
+             [FromQuery] int? endYear,
+             [FromQuery] int page = 1,
+             [FromQuery] int pageSize = 10,
+             [FromQuery] string sortBy = "Title",
+             [FromQuery] string sortOrder = "asc" 
+         )
         {
-            var result = await _mediator.Send(command);
+            var query = new SearchBooksQuery(title, genres, authors, startYear, endYear, page, pageSize, sortBy, sortOrder);
+            var result = await _mediator.Send(query);
             return Ok(result);
         }
+
+
+        [HttpGet("available")]
+        public async Task<ActionResult<List<Book>>> GetAvailableBooks()
+        {
+            var result = await _mediator.Send(new GetAvailableBooksQuery());
+            return Ok(result);
+        }
+
     }
 }

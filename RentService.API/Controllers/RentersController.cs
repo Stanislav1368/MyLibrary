@@ -1,18 +1,18 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using BookService.Application.Commands;
-using BookService.Application.Queries;
-using BookService.Domain.Entities;
+using RentService.Application.Commands;
+using RentService.Application.Queries;
+using RentService.Domain.Entities;
 
-namespace BookService.API.Controllers
+namespace RentService.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class RenterController : ControllerBase
+    public class RentersController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public RenterController(IMediator mediator)
+        public RentersController(IMediator mediator)
         {
             _mediator = mediator;
         }

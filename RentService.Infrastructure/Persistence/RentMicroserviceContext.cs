@@ -4,10 +4,10 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
-using BookService.Domain.Entities;
+using RentService.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace BookService.Infrastructure.Persistence
+namespace RentService.Infrastructure.Persistence
 {
     public class RentMicroserviceContext : DbContext
     {

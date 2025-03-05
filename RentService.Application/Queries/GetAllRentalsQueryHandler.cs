@@ -1,11 +1,9 @@
 ﻿using MediatR;
-using BookService.Domain.Interfaces;
-using BookService.Domain.Entities;
-using BookService.Domain.Entities;
-using BookService.Domain.Interfaces;
+using RentService.Domain.Entities;
+using RentService.Domain.Interfaces;
 
 
-namespace BookService.Application.Queries
+namespace RentService.Application.Queries
 {
     public record GetAllRentalsQuery() : IRequest<IEnumerable<Rental>>;
     public class GetAllRentalsQueryHandler : IRequestHandler<GetAllRentalsQuery, IEnumerable<Rental>>

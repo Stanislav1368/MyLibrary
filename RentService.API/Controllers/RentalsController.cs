@@ -1,19 +1,20 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using BookService.Application.Commands;
-using BookService.Application.Queries;
-using BookService.Domain.Entities;
+using RentService.Application.Commands;
+using RentService.Application.Queries;
+using RentService.Domain.Entities;
+using RentService.Application.Commands;
 
 
-namespace BookService.API.Controllers
+namespace RentService.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class RentalController : ControllerBase
+    public class RentalsController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public RentalController(IMediator mediator)
+        public RentalsController(IMediator mediator)
         {
             _mediator = mediator;
         }
@@ -53,5 +54,13 @@ namespace BookService.API.Controllers
             await _mediator.Send(new DeleteRentalCommand(id));
             return NoContent();
         }
+
+        [HttpGet("IsBookAvailable")]
+        public async Task<ActionResult<bool>> IsBookAvailable([FromQuery] int bookId)
+        {
+            var result = await _mediator.Send(new IsBookAvailableQuery(bookId));
+            return Ok(result);
+        }
+
     }
 }

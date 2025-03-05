@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace BookService.Domain.Entities
+namespace RentService.Domain.Entities
 {
     public class Rental
     {
@@ -31,6 +31,6 @@ namespace BookService.Domain.Entities
         public DateTime? ActualReturnDate { get; set; }
 
         [MaxLength(500)]
-        public string Review { get; set; }
+        public string? Review { get; set; }
     }
 }

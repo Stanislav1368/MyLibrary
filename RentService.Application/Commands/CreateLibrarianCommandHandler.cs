@@ -1,10 +1,10 @@
 ﻿using MediatR;
-using BookService.Domain.Entities;
-using BookService.Domain.Interfaces;
+using RentService.Domain.Entities;
+using RentService.Domain.Interfaces;
 
 
 
-namespace BookService.Application.Commands
+namespace RentService.Application.Commands
 {
     public record CreateLibrarianCommand(string Login, string PasswordHash, string FullName, string Email, string Phone) : IRequest<Librarian>;
     public class CreateLibrarianCommandHandler : IRequestHandler<CreateLibrarianCommand, Librarian>
