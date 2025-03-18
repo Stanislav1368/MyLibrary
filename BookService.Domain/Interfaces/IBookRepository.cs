@@ -11,7 +11,7 @@ namespace BookService.Domain.Interfaces
         Task AddAsync(Book book);
         Task UpdateAsync(Book book);
         Task DeleteAsync(int id);
-        Task<IEnumerable<Book>> SearchBooksAsync(string? title, List<string>? genres, List<string>? authors, int? startYear, int? endYear, int page, int pageSize, string sortBy, string sortOrder);
+        Task<IEnumerable<Book>> SearchBooksAsync(string? title, List<string>? genres, List<string>? authors, int? startYear, int? endYear, bool? isAccess, int page, int pageSize, string sortBy, string sortOrder);
         
     }
 }

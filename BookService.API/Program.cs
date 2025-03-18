@@ -8,47 +8,105 @@ using FluentValidation.AspNetCore;
 using FluentValidation;
 using BookService.Application.Validators;
 using BookService.Application.Common;
+using BookService.Infrastructure.EventBus;
+using MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<BookMicroserviceContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddMediatR(cfg =>
-    cfg.RegisterServicesFromAssembly(typeof(CreateAuthorCommand).Assembly));
 
-builder.Services.AddFluentValidationAutoValidation()
-                .AddFluentValidationClientsideAdapters();
-builder.Services.AddValidatorsFromAssemblyContaining<CreateAuthorCommandValidator>();
-
-builder.Services.AddScoped<ValidatorService>();
-
-builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
-builder.Services.AddScoped<IGenreRepository, GenreRepository>();
-builder.Services.AddScoped<IBookRepository, BookRepository>();
-builder.Services.AddHttpClient();
-
-
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-    });
-
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+ConfigureDatabase(builder);
+ConfigureMediatR(builder);
+ConfigureFluentValidation(builder);
+ConfigureRepositories(builder);
+ConfigureMassTransit(builder);
+ConfigureControllers(builder);
+ConfigureSwagger(builder);
 
 var app = builder.Build();
 
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
+ConfigureMiddleware(app);
 
 app.Run();
+
+void ConfigureDatabase(WebApplicationBuilder builder)
+{
+    builder.Services.AddDbContext<BookMicroserviceContext>(options =>
+        options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+}
+
+void ConfigureMediatR(WebApplicationBuilder builder)
+{
+    builder.Services.AddMediatR(cfg =>
+        cfg.RegisterServicesFromAssembly(typeof(CreateAuthorCommand).Assembly));
+}
+
+void ConfigureFluentValidation(WebApplicationBuilder builder)
+{
+    builder.Services.AddFluentValidationAutoValidation()
+                    .AddFluentValidationClientsideAdapters();
+    builder.Services.AddValidatorsFromAssemblyContaining<CreateAuthorCommandValidator>();
+    builder.Services.AddScoped<ValidatorService>();
+}
+
+void ConfigureRepositories(WebApplicationBuilder builder)
+{
+    builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+    builder.Services.AddScoped<IGenreRepository, GenreRepository>();
+    builder.Services.AddScoped<IBookRepository, BookRepository>();
+    builder.Services.AddHttpClient();
+}
+
+void ConfigureMassTransit(WebApplicationBuilder builder)
+{
+    builder.Services.AddMassTransit(config =>
+    {
+        config.AddConsumer<BookRentedEventConsumer>();
+        config.AddConsumer<BookReturnedEventConsumer>();
+        config.UsingRabbitMq((ctx, cfg) =>
+        {
+            cfg.Host("localhost", "/", h =>
+            {
+                h.Username("guest");
+                h.Password("guest");
+            });
+
+            cfg.ReceiveEndpoint("book-rented", e =>
+            {
+                e.ConfigureConsumer<BookRentedEventConsumer>(ctx);
+            });
+
+            cfg.ReceiveEndpoint("book-returned", e =>
+            {
+                e.ConfigureConsumer<BookReturnedEventConsumer>(ctx);
+            });
+        });
+    });
+    builder.Services.AddScoped<BookRentedEventConsumer>();
+}
+
+void ConfigureControllers(WebApplicationBuilder builder)
+{
+    builder.Services.AddControllers()
+        .AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        });
+}
+
+void ConfigureSwagger(WebApplicationBuilder builder)
+{
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
+}
+
+void ConfigureMiddleware(WebApplication app)
+{
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+
+    app.UseHttpsRedirection();
+    app.UseAuthorization();
+    app.MapControllers();
+}

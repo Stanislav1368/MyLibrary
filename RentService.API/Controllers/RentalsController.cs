@@ -1,9 +1,10 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RentService.Application.Commands;
 using RentService.Application.Queries;
 using RentService.Domain.Entities;
-using RentService.Application.Commands;
+
 
 
 namespace RentService.API.Controllers
@@ -19,6 +20,7 @@ namespace RentService.API.Controllers
             _mediator = mediator;
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Rental>> CreateRental(CreateRentalCommand command)
         {
@@ -26,6 +28,15 @@ namespace RentService.API.Controllers
             return Ok(result);
         }
 
+        [Authorize]
+        [HttpPost("close")]
+        public async Task<ActionResult> CloseRental(CloseRentalCommand command)
+        {
+            await _mediator.Send(command);
+            return Ok();
+        }
+
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<List<Rental>>> GetAllRentals()
         {
@@ -33,6 +44,7 @@ namespace RentService.API.Controllers
             return Ok(result);
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<Rental>> GetRental(int id)
         {
@@ -40,6 +52,7 @@ namespace RentService.API.Controllers
             return Ok(result);
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateRental(int id, UpdateRentalCommand command)
         {
@@ -48,6 +61,7 @@ namespace RentService.API.Controllers
             return NoContent();
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteRental(int id)
         {
@@ -55,6 +69,7 @@ namespace RentService.API.Controllers
             return NoContent();
         }
 
+        [Authorize]
         [HttpGet("IsBookAvailable")]
         public async Task<ActionResult<bool>> IsBookAvailable([FromQuery] int bookId)
         {

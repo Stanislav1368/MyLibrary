@@ -101,6 +101,9 @@ namespace BookService.Infrastructure.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 
+                    b.Property<bool>("IsAccess")
+                        .HasColumnType("boolean");
+
                     b.Property<int?>("PublicationYear")
                         .HasColumnType("integer");
 

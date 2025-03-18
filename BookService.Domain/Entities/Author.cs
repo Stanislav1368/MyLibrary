@@ -22,6 +22,6 @@ namespace BookService.Domain.Entities
         public string Biography { get; set; }
 
         [JsonIgnore]
-        public List<Book> Books { get; set; } = new List<Book>();
+        public ICollection<Book> Books { get; set; } = new List<Book>();
     }
 }

@@ -1,15 +1,12 @@
 ﻿using RentService.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RentService.Domain.Interfaces
 {
     public interface ILibrarianRepository
     {
         Task<Librarian> GetByIdAsync(int id);
+
+        Task<Librarian> GetByEmailAsync(string email);
         Task<IEnumerable<Librarian>> GetAllAsync();
         Task AddAsync(Librarian librarian);
         Task UpdateAsync(Librarian librarian);

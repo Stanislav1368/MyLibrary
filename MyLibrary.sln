@@ -15,13 +15,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookService.Infrastructure"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RentMicroservice", "RentMicroservice", "{6BD07BD3-37FE-4BBA-97E9-60BE122264A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentService.API", "RentService.API\RentService.API.csproj", "{3A3C0DF5-F3BA-42FB-9B19-76AA342127B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RentService.API", "RentService.API\RentService.API.csproj", "{3A3C0DF5-F3BA-42FB-9B19-76AA342127B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentService.Domain", "RentService.Domain\RentService.Domain.csproj", "{EE8F29FB-DC68-419D-B031-1359904F919E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RentService.Domain", "RentService.Domain\RentService.Domain.csproj", "{EE8F29FB-DC68-419D-B031-1359904F919E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentService.Application", "RentService.Application\RentService.Application.csproj", "{8E685D51-9A1B-476A-BE61-B40B9F70C6AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RentService.Application", "RentService.Application\RentService.Application.csproj", "{8E685D51-9A1B-476A-BE61-B40B9F70C6AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentService.Infrastructure", "RentService.Infrastructure\RentService.Infrastructure.csproj", "{76F748BD-96A8-4F24-AC4F-848B000BB6A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RentService.Infrastructure", "RentService.Infrastructure\RentService.Infrastructure.csproj", "{76F748BD-96A8-4F24-AC4F-848B000BB6A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedContracts", "SharedContracts\SharedContracts.csproj", "{32F427A2-1C83-40A4-881A-9CF32517CCFB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +63,10 @@ Global
 		{76F748BD-96A8-4F24-AC4F-848B000BB6A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76F748BD-96A8-4F24-AC4F-848B000BB6A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76F748BD-96A8-4F24-AC4F-848B000BB6A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32F427A2-1C83-40A4-881A-9CF32517CCFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32F427A2-1C83-40A4-881A-9CF32517CCFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32F427A2-1C83-40A4-881A-9CF32517CCFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32F427A2-1C83-40A4-881A-9CF32517CCFB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

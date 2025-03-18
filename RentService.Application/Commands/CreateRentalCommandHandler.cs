@@ -3,6 +3,8 @@ using RentService.Domain.Interfaces;
 using System.Text.Json;
 using MediatR;
 using System.Text.Json.Serialization;
+using MassTransit;
+using SharedContracts;
 
 namespace RentService.Application.Commands
 {
@@ -20,14 +22,22 @@ namespace RentService.Application.Commands
         private readonly ILibrarianRepository _librarianRepository;
         private readonly IStatusRepository _statusRepository;
         private readonly HttpClient _httpClient;
+        private readonly IPublishEndpoint _publishEndpoint;
 
-        public CreateRentalCommandHandler(IRentalRepository rentalRepository, IStatusRepository statusRepository, ILibrarianRepository librarianRepository, IRenterRepository renterRepository, HttpClient httpClient)
+        public CreateRentalCommandHandler(
+            IRentalRepository rentalRepository,
+            IStatusRepository statusRepository,
+            ILibrarianRepository librarianRepository,
+            IRenterRepository renterRepository,
+            HttpClient httpClient,
+            IPublishEndpoint publishEndpoint) 
         {
             _rentalRepository = rentalRepository;
             _renterRepository = renterRepository;
             _librarianRepository = librarianRepository;
             _statusRepository = statusRepository;
             _httpClient = httpClient;
+            _publishEndpoint = publishEndpoint;
         }
 
         public async Task<Rental> Handle(CreateRentalCommand request, CancellationToken cancellationToken)
@@ -46,13 +56,11 @@ namespace RentService.Application.Commands
                 throw new Exception("Арендатор с таким Id не найден");
             }
 
-
             var librarian = await _librarianRepository.GetByIdAsync(request.LibrarianId);
             if (librarian == null)
             {
                 throw new Exception("Библиотекарь с таким Id не найден");
             }
-
 
             var status = await _statusRepository.GetByIdAsync(1);
             if (status == null)
@@ -74,6 +82,13 @@ namespace RentService.Application.Commands
             };
 
             await _rentalRepository.AddAsync(rental);
+
+        
+            await _publishEndpoint.Publish(
+                new BookRentedEvent(bookId, request.StartDate, request.EndDate),
+                cancellationToken
+            );
+
             return rental;
         }
 

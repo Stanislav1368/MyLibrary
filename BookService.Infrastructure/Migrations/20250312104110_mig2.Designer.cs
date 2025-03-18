@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BookService.Infrastructure.Migrations
 {
     [DbContext(typeof(BookMicroserviceContext))]
-    [Migration("20250305150013_0503mig")]
-    partial class _0503mig
+    [Migration("20250312104110_mig2")]
+    partial class mig2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

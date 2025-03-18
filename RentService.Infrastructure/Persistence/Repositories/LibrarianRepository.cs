@@ -20,6 +20,11 @@ namespace RentService.Infrastructure.Persistence.Repositories
                 .FirstOrDefaultAsync(l => l.Id == id);
         }
 
+        public async Task<Librarian> GetByEmailAsync(string email)
+        {
+            return await _context.Librarians
+                .FirstOrDefaultAsync(l => l.Email == email);
+        }
         public async Task<IEnumerable<Librarian>> GetAllAsync()
         {
             return await _context.Librarians.Include(l => l.Rentals).ToListAsync();
@@ -46,5 +51,7 @@ namespace RentService.Infrastructure.Persistence.Repositories
                 await _context.SaveChangesAsync();
             }
         }
+
+
     }
 }

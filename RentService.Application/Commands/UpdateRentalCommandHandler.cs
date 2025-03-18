@@ -1,10 +1,5 @@
 ﻿using MediatR;
 using RentService.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RentService.Application.Commands
 {

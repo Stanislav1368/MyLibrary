@@ -1,8 +1,6 @@
 ﻿using MediatR;
 using RentService.Domain.Entities;
 using RentService.Domain.Interfaces;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace RentService.Application.Queries
 {

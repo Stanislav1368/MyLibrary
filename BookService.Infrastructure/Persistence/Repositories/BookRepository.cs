@@ -55,15 +55,16 @@ namespace BookService.Infrastructure.Persistence.Repositories
         }
 
         public async Task<IEnumerable<Book>> SearchBooksAsync(
-         string? title,
-         List<string>? genres,
-         List<string>? authors,
-         int? startYear,
-         int? endYear,
-         int page,
-         int pageSize,
-         string sortBy,
-         string sortOrder)
+            string? title,
+            List<string>? genres,
+            List<string>? authors,
+            int? startYear,
+            int? endYear,
+            bool? isAccess,
+            int page,
+            int pageSize,
+            string sortBy,
+            string sortOrder)
         {
             var books = _context.Books
                 .Include(b => b.Authors)
@@ -85,11 +86,14 @@ namespace BookService.Infrastructure.Persistence.Repositories
             if (endYear.HasValue)
                 books = books.Where(b => b.PublicationYear <= endYear.Value);
 
+            if (isAccess.HasValue)
+                books = books.Where(b => b.IsAccess == isAccess.Value);
+
             books = sortBy switch
             {
                 "Title" => sortOrder.ToLower() == "asc" ? books.OrderBy(b => b.Title) : books.OrderByDescending(b => b.Title),
                 "PublicationYear" => sortOrder.ToLower() == "asc" ? books.OrderBy(b => b.PublicationYear) : books.OrderByDescending(b => b.PublicationYear),
-                _ => books.OrderBy(b => b.Title), 
+                _ => books.OrderBy(b => b.Title),
             };
 
             var pagedBooks = await books

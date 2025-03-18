@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RentService.Application.Commands;
 using RentService.Application.Queries;
@@ -12,7 +13,7 @@ namespace RentService.API.Controllers
     [ApiController]
     [Route("api/[controller]")]
     public class LibrariansController : ControllerBase
-    {
+    {   
         private readonly IMediator _mediator;
 
         public LibrariansController(IMediator mediator)
@@ -20,13 +21,23 @@ namespace RentService.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost]
-        public async Task<ActionResult<Librarian>> CreateLibrarian(CreateLibrarianCommand command)
+
+        [HttpPost("register")]
+        public async Task<ActionResult<Librarian>> RegisterLibrarian(RegisterLibrarianCommand command)
         {
-            var result = await _mediator.Send(command);
-            return Ok(result);
+            await _mediator.Send(command);
+            return Ok();
         }
 
+
+        [HttpPost("login")]
+        public async Task<ActionResult<Librarian>> LoginLibrarian(LoginLibrarianCommand command)
+        {
+            var token = await _mediator.Send(command);
+            return Ok(token);
+        }
+
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<List<Librarian>>> GetAllLibrarians()
         {
@@ -34,6 +45,7 @@ namespace RentService.API.Controllers
             return Ok(result);
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteLibrarian(int id)
         {

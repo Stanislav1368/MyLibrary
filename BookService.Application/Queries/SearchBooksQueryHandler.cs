@@ -14,7 +14,8 @@ namespace BookService.Application.Queries
      List<string>? Genres,
      List<string>? Authors,
      int? StartYear,
-     int? EndYear,
+     int? EndYear, 
+     bool? IsAccess,
      int Page,
      int PageSize,
      string SortBy,
@@ -31,7 +32,7 @@ namespace BookService.Application.Queries
 
         public async Task<IEnumerable<Book>> Handle(SearchBooksQuery request, CancellationToken cancellationToken)
         {
-            return await _bookRepository.SearchBooksAsync(request.Title, request.Genres, request.Authors, request.StartYear, request.EndYear, request.Page, request.PageSize, request.SortBy, request.SortOrder);
+            return await _bookRepository.SearchBooksAsync(request.Title, request.Genres, request.Authors, request.StartYear, request.EndYear, request.IsAccess, request.Page, request.PageSize, request.SortBy, request.SortOrder);
         }
     }
 }

@@ -59,24 +59,16 @@ namespace BookService.API.Controllers
              [FromQuery] List<string>? authors,
              [FromQuery] int? startYear,
              [FromQuery] int? endYear,
+             [FromQuery] bool? isAccess,
              [FromQuery] int page = 1,
              [FromQuery] int pageSize = 10,
              [FromQuery] string sortBy = "Title",
              [FromQuery] string sortOrder = "asc" 
          )
         {
-            var query = new SearchBooksQuery(title, genres, authors, startYear, endYear, page, pageSize, sortBy, sortOrder);
+            var query = new SearchBooksQuery(title, genres, authors, startYear, endYear, isAccess, page, pageSize, sortBy, sortOrder);
             var result = await _mediator.Send(query);
             return Ok(result);
         }
-
-
-        [HttpGet("available")]
-        public async Task<ActionResult<List<Book>>> GetAvailableBooks()
-        {
-            var result = await _mediator.Send(new GetAvailableBooksQuery());
-            return Ok(result);
-        }
-
     }
 }
