@@ -23,7 +23,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RentService.Application", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RentService.Infrastructure", "RentService.Infrastructure\RentService.Infrastructure.csproj", "{76F748BD-96A8-4F24-AC4F-848B000BB6A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedContracts", "SharedContracts\SharedContracts.csproj", "{32F427A2-1C83-40A4-881A-9CF32517CCFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedContracts", "SharedContracts\SharedContracts.csproj", "{32F427A2-1C83-40A4-881A-9CF32517CCFB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentService.Tests", "RentService.Tests\RentService.Tests.csproj", "{A9FD06BB-3AD0-4DF8-BCB0-E0F64DF6FAF1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +69,10 @@ Global
 		{32F427A2-1C83-40A4-881A-9CF32517CCFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32F427A2-1C83-40A4-881A-9CF32517CCFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32F427A2-1C83-40A4-881A-9CF32517CCFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9FD06BB-3AD0-4DF8-BCB0-E0F64DF6FAF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9FD06BB-3AD0-4DF8-BCB0-E0F64DF6FAF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9FD06BB-3AD0-4DF8-BCB0-E0F64DF6FAF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9FD06BB-3AD0-4DF8-BCB0-E0F64DF6FAF1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,6 +86,7 @@ Global
 		{EE8F29FB-DC68-419D-B031-1359904F919E} = {6BD07BD3-37FE-4BBA-97E9-60BE122264A8}
 		{8E685D51-9A1B-476A-BE61-B40B9F70C6AF} = {6BD07BD3-37FE-4BBA-97E9-60BE122264A8}
 		{76F748BD-96A8-4F24-AC4F-848B000BB6A8} = {6BD07BD3-37FE-4BBA-97E9-60BE122264A8}
+		{A9FD06BB-3AD0-4DF8-BCB0-E0F64DF6FAF1} = {6BD07BD3-37FE-4BBA-97E9-60BE122264A8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {477F21D9-362A-48BD-AB02-0D554E0028D6}
