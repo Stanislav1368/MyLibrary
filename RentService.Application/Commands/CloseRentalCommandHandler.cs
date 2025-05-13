@@ -1,11 +1,13 @@
 ﻿using MassTransit;
 using MediatR;
+using RentService.Application.Common.Exceptions;
+using RentService.Domain.Entities;
 using RentService.Domain.Interfaces;
 using SharedContracts;
 
 namespace RentService.Application.Commands
 {
-    public record CloseRentalCommand(int RentalId, DateTime ActualReturnDate) : IRequest;
+    public record CloseRentalCommand(int RentalId, DateTime ActualReturnDate, string? Review = null) : IRequest;
 
     public class CloseRentalCommandHandler : IRequestHandler<CloseRentalCommand>
     {
@@ -20,13 +22,14 @@ namespace RentService.Application.Commands
 
         public async Task Handle(CloseRentalCommand request, CancellationToken cancellationToken)
         {
-            var rental = await _rentalRepository.GetByIdAsync(request.RentalId);
-            if (rental == null)
+          
+            var rental = await _rentalRepository.GetByIdAsync(request.RentalId) ?? throw new NotFoundException("Rental", request.RentalId);
+            if (rental.StatusId == (int)StatusType.Completed)
             {
-                throw new Exception("Аренда не найдена");
+                throw new ConflictException("Аренда уже закрыта");
             }
-
             rental.ActualReturnDate = request.ActualReturnDate;
+            rental.Review = request.Review;
             await _rentalRepository.UpdateAsync(rental);
  
             await _publishEndpoint.Publish(

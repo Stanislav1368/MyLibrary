@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using RentService.Application.Common.Exceptions;
 using RentService.Domain.Interfaces;
 
 namespace RentService.Application.Commands
@@ -16,7 +17,7 @@ namespace RentService.Application.Commands
             var rental = await _rentalRepository.GetByIdAsync(request.Id);
             if (rental == null)
             {
-                throw new Exception("Аренда с таким Id не найдена");
+                throw new NotFoundException("Rental", request.Id);
             }
 
             rental.StatusId = request.StatusId;

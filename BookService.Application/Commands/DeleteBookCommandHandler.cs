@@ -1,4 +1,5 @@
-﻿using BookService.Domain.Interfaces;
+﻿using BookService.Application.Common.Exceptions;
+using BookService.Domain.Interfaces;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -22,13 +23,13 @@ namespace BookService.Application.Commands
         {
             if (request.Id <= 0)
             {
-                throw new ArgumentException("Неверный ID книги.");
+                throw new BadRequestException("Неверный ID книги. ID не может быть <= 0");
             }
 
             var book = await _bookRepository.GetByIdAsync(request.Id);
             if (book == null)
             {
-                throw new Exception("Книга с данным ID не найдена.");
+                throw new NotFoundException("Book", request.Id);
             }
 
             await _bookRepository.DeleteAsync(request.Id);

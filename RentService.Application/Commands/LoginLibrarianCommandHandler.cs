@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
+using RentService.Application.Common.Exceptions;
 using RentService.Domain.Entities;
 using RentService.Domain.Interfaces;
 
@@ -27,21 +28,30 @@ namespace RentService.Application.Commands
             var librarian = await _librarianRepository.GetByEmailAsync(request.Email);
             if (librarian == null)
             {
-                throw new Exception("Пользователь не найден");
+                throw new NotFoundException("Librarian", request.Email);
             }
 
             var result = _passwordHasher.Verify(request.Password, librarian.PasswordHash);
             if (!result)
             {
-                throw new UnauthorizedAccessException("Неверный пароль");
+                throw new UnauthorizedException("Неверный email или пароль");
             }
 
-            var token = _tokenProvider.GenerateToken(librarian);
 
-            var httpContext = _httpContextAccessor.HttpContext;
-            httpContext?.Response.Cookies.Append("cookies_", token);
+            try
+            {
 
-            return token;
+                var token = _tokenProvider.GenerateToken(librarian);
+
+                var httpContext = _httpContextAccessor.HttpContext;
+                httpContext?.Response.Cookies.Append("cookies_", token);
+
+                return token;
+            }
+            catch (Exception ex)
+            {
+                throw new UnauthorizedException($"Ошибка авторизации, подробнее: {ex.Message}");
+            }
         }
     }
 }

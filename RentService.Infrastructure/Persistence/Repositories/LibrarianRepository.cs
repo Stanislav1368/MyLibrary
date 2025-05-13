@@ -16,8 +16,7 @@ namespace RentService.Infrastructure.Persistence.Repositories
         public async Task<Librarian> GetByIdAsync(int id)
         {
             return await _context.Librarians
-                .Include(l => l.Rentals)
-                .FirstOrDefaultAsync(l => l.Id == id);
+                .Include(l => l.Rentals).FirstOrDefaultAsync(l => l.Id == id);
         }
 
         public async Task<Librarian> GetByEmailAsync(string email)

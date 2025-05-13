@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using RentService.Application.Common.Exceptions;
 using RentService.Domain.Interfaces;
 
 namespace RentService.Application.Commands
@@ -14,7 +15,7 @@ namespace RentService.Application.Commands
         public async Task Handle(UpdateRenterCommand request, CancellationToken cancellationToken)
         {
             var renter = await _renterRepository.GetByIdAsync(request.Id);
-            if (renter == null) throw new Exception("Арендатор с таким Id не найден");
+            if (renter == null) throw new NotFoundException("Renter", request.Id);
 
             renter.FullName = request.FullName;
             renter.Email = request.Email;

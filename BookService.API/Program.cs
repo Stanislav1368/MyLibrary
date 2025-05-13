@@ -10,6 +10,7 @@ using BookService.Application.Validators;
 using BookService.Application.Common;
 using BookService.Infrastructure.EventBus;
 using MassTransit;
+using BookService.API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -100,6 +101,7 @@ void ConfigureSwagger(WebApplicationBuilder builder)
 
 void ConfigureMiddleware(WebApplication app)
 {
+    app.UseMiddleware<ExceptionHandlingMiddleware>();
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();

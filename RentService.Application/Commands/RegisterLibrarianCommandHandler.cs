@@ -6,6 +6,9 @@ using RentService.Domain.Interfaces;
 
 namespace RentService.Application.Commands
 {
+    /// <summary>
+    /// Команда для регистрации нового библиотекаря в системе.
+    /// </summary>
     public record RegisterLibrarianCommand(string Login, string Password, string FullName, string Email, string Phone) : IRequest;
     public class RegisterLibrarianCommandHandler : IRequestHandler<RegisterLibrarianCommand>
     {

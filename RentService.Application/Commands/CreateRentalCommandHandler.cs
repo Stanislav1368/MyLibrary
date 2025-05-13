@@ -5,6 +5,7 @@ using MediatR;
 using System.Text.Json.Serialization;
 using MassTransit;
 using SharedContracts;
+using RentService.Application.Common.Exceptions;
 
 namespace RentService.Application.Commands
 {
@@ -14,6 +15,7 @@ namespace RentService.Application.Commands
            int LibrarianId,
            DateTime StartDate,
            DateTime EndDate) : IRequest<Rental>;
+
 
     public class CreateRentalCommandHandler : IRequestHandler<CreateRentalCommand, Rental>
     {
@@ -42,30 +44,29 @@ namespace RentService.Application.Commands
 
         public async Task<Rental> Handle(CreateRentalCommand request, CancellationToken cancellationToken)
         {
-            // Получаем bookId из внешнего сервиса
             var bookId = await GetBookIdFromExternalService(request.ExternalBookId);
 
             if (await _rentalRepository.IsBookRentedAsync(bookId))
             {
-                throw new Exception("Книга уже арендована");
+                throw new ConflictException("Книга уже арендована");
             }
 
             var renter = await _renterRepository.GetByIdAsync(request.RenterId);
             if (renter == null)
             {
-                throw new Exception("Арендатор с таким Id не найден");
+                throw new NotFoundException("Renter", request.RenterId);
             }
 
             var librarian = await _librarianRepository.GetByIdAsync(request.LibrarianId);
             if (librarian == null)
             {
-                throw new Exception("Библиотекарь с таким Id не найден");
+                throw new NotFoundException("Librarian", request.LibrarianId);
             }
 
-            var status = await _statusRepository.GetByIdAsync(1);
+            var status = await _statusRepository.GetByIdAsync((int)StatusType.Active);
             if (status == null)
             {
-                throw new Exception("Статус с таким Id не найден");
+                throw new NotFoundException("Status", (int)StatusType.Active);
             }
 
             var rental = new Rental
@@ -91,19 +92,34 @@ namespace RentService.Application.Commands
 
             return rental;
         }
-
+        /// <summary>
+        /// Получает внутренний идентификатор книги из внешнего сервиса по внешнему идентификатору.
+        /// </summary>
+        /// <param name="externalBookId">Внешний идентификатор книги.</param>
+        /// <returns>Внутренний идентификатор книги.</returns>
         private async Task<int> GetBookIdFromExternalService(int externalBookId)
         {
+            if (externalBookId <= 0)
+            {
+                throw new BadRequestException("Неверный ID книги. ID не может быть <= 0");
+            }
+
             var response = await _httpClient.GetAsync($"https://localhost:7055/api/books/{externalBookId}");
             response.EnsureSuccessStatusCode();
 
             var content = await response.Content.ReadAsStringAsync();
             var book = JsonSerializer.Deserialize<BookResponse>(content);
 
-            return book?.Id ?? throw new Exception("Книга с таким Id не найдена");
+            return book?.Id ?? throw new NotFoundException("Book", externalBookId);
         }
-
-        private record BookResponse([property: JsonPropertyName("id")] int Id);
+        /// <summary>
+        /// DTO для десериализации ответа от внешнего сервиса книг.
+        /// </summary>
+        /// <param name="Id">Внутренний идентификатор книги во внешней системе.</param>
+        private record BookResponse(/// <summary>
+                                    /// Уникальный идентификатор книги во внешней системе.
+                                    /// </summary>
+                                    [property: JsonPropertyName("id")] int Id);
     }
 
 }

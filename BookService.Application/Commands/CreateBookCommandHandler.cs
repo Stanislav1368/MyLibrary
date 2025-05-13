@@ -3,6 +3,7 @@ using BookService.Domain.Interfaces;
 using BookService.Domain.Entities;
 using FluentValidation;
 using BookService.Application.Common;
+using BookService.Application.Common.Exceptions;
 
 namespace BookService.Application.Commands
 {
@@ -37,7 +38,12 @@ namespace BookService.Application.Commands
             await _validatorService.ValidateAsync<CreateBookCommand>(request, cancellationToken);
 
             var authors = await _authorRepository.GetByIdsAsync(request.AuthorIds);
+            if (authors.Count() != request.AuthorIds.Count)
+                throw new NotFoundException("Author", request.AuthorIds);
+
             var genres = await _genreRepository.GetByIdsAsync(request.GenreIds);
+            if (genres.Count() != request.GenreIds.Count)
+                throw new NotFoundException("Genre", request.GenreIds);
 
             var book = new Book
             {
@@ -51,25 +57,6 @@ namespace BookService.Application.Commands
 
             await _bookRepository.AddAsync(book);
             return book;
-            //return new BookDto
-            //{
-            //    Id = book.Id,
-            //    Title = book.Title,
-            //    PublicationYear = book.PublicationYear,
-            //    Description = book.Description,
-            //    IsAccess = book.IsAccess,
-            //    Condition = book.Condition,
-            //    Authors = book.Authors.Select(a => new AuthorDto
-            //    {
-            //        Id = a.Id,
-            //        FullName = a.FullName
-            //    }).ToList(),
-            //    Genres = book.Genres.Select(g => new GenreDto
-            //    {
-            //        Id = g.Id,
-            //        Name = g.Name
-            //    }).ToList()
-            //};
         }
     }
 }

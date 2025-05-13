@@ -1,4 +1,5 @@
-﻿using BookService.Domain.Interfaces;
+﻿using BookService.Application.Common.Exceptions;
+using BookService.Domain.Interfaces;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace BookService.Application.Commands
             var book = await _bookRepository.GetByIdAsync(request.BookId);
             if (book == null)
             {
-                throw new Exception("Книга не найдена");
+                throw new NotFoundException("Book", request.BookId);
             }
 
             book.IsAccess = true;
